@@ -61,23 +61,22 @@ document.getElementById("user-input").addEventListener("keydown", async (event) 
 });
 
 async function fetchChatGPTResponse(userInput) {
-    try {
-        const response = await fetch("/api/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ message: userInput }),
-        });
+    // Replace 'your-chatgpt-api-url' and 'your-api-key' with actual API details
+    const apiUrl = "https://api.openai.com/v1/chat/completions";
+    const apiKey = "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";
 
-        if (!response.ok) {
-            throw new Error("Failed to fetch response");
-        }
+    const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${"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"}`,
+        },
+        body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: userInput }],
+        }),
+    });
 
-        const data = await response.json();
-        return data.choices[0].message.content;
-    } catch (error) {
-        console.error("Error fetching response:", error);
-        return "Sorry, something went wrong.";
-    }
+    const data = await response.json();
+    return data.choices[0].message.content;
 }
